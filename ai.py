@@ -1,8 +1,8 @@
 from openai import OpenAI
 
 # Initialize the client with your API key
-YOUR_API_KEY = "INSERT API KEY HERE"
-client = OpenAI(api_key=YOUR_API_KEY, base_url="https://api.perplexity.ai")
+YOUR_API_KEY = "API KEY HERE"
+client = OpenAI(api_key=YOUR_API_KEY, base_url="https://openrouter.ai/api/v1")
 
 def aiQuery(question):
     """
@@ -22,7 +22,7 @@ def aiQuery(question):
     ]
     
     response = client.chat.completions.create(
-        model="llama-3.1-sonar-large-128k-online",
+        model="google/gemini-flash-1.5",
         messages=messages,
     )
     
@@ -52,7 +52,7 @@ def agentResponse(system_prompt, conversation_history):
     ]
     
     response = client.chat.completions.create(
-        model="llama-3.1-sonar-large-128k-online",
+        model="google/gemini-flash-1.5",
         messages=messages,
     )
     
