@@ -27,7 +27,7 @@ def aiQuery(question):
     )
     
     # Extract and return the content of the response
-    return response['choices'][0]['message']['content']
+    return response.choices[0].message.content  # Accessing attributes instead of using dictionary indexing
 
 def agentResponse(system_prompt, conversation_history):
     """
@@ -57,4 +57,4 @@ def agentResponse(system_prompt, conversation_history):
     )
     
     # Extract and return the content of the response
-    return response['choices'][0]['message']['content']
+    return response.choices[0].message.content  # Accessing attributes instead of using dictionary indexing
