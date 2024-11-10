@@ -15,31 +15,39 @@ def debate_between_agents(topic, turns):
     """
     # Initialize system prompts for both agents
     system_prompt_agent_pro = (
-        f"You are an AI assistant advocating that '{topic}' is beneficial or true. "
-        "You deeply believe this and will advocate your reasoning in one paragraph." 
+        f"You are Agent Pro, an AI assistant advocating that '{topic}' is beneficial or true. "
+        "You deeply believe this and will advocate your reasoning in one paragraph."
+        "You make sure to disupte points against your belifs while also introducing new points yourself."
+        
     )
     
     system_prompt_agent_con = (
-        f"You are an AI assistant arguing that '{topic}' is harmful or false. "
-        "You deeply believe this and will advocate your reasoning in one paragraph." 
+        f"You are Agent Con, an AI assistant arguing that '{topic}' is harmful or false. "
+        "You deeply believe this and will advocate your reasoning in one paragraph."
+        "You make sure to disupte points against your belifs while also introducing new points yourself."
     )
     
     # Initialize conversation history
-    conversation_history = f"Topic for debate: {topic}"
-    
+    conversation_history = []
+
     # Debate loop
     for turn in range(1, turns + 1):
         if turn % 2 != 0:  # Odd turns for Agent Pro
             print(f"\nTurn {turn} - Agent Pro:")
-            response_pro = agentResponse(system_prompt_agent_pro, conversation_history)
-            print(response_pro)
-            conversation_history += f"\nAgent Pro: {response_pro}"
+            system_prompt = system_prompt_agent_pro
+            agent_name = "Agent Pro"
         else:  # Even turns for Agent Con
             print(f"\nTurn {turn} - Agent Con:")
-            response_con = agentResponse(system_prompt_agent_con, conversation_history)
-            print(response_con)
-            conversation_history += f"\nAgent Con: {response_con}"
-    
+            system_prompt = system_prompt_agent_con
+            agent_name = "Agent Con"
+        
+        messages = [{"role": "system", "content": system_prompt}] + conversation_history
+
+        response = agentResponse(messages)
+        print(response)
+        # Append the assistant's response to the conversation history with the agent's name
+        conversation_history.append({"role": "assistant", "name": agent_name, "content": response})
+
     # Judging the debate
     print("\nDebate concluded. Evaluating the arguments...\n")
     judge_prompt = (
@@ -52,7 +60,8 @@ def debate_between_agents(topic, turns):
         "Provide scores out of 10 for each category for both agents, "
         "and declare a winner based on the total scores. Provide a summary of your evaluation."
     )
-    judge_response = agentResponse(judge_prompt, conversation_history)
+    messages = [{"role": "system", "content": judge_prompt}] + conversation_history
+    judge_response = agentResponse(messages)
     print(judge_response)
 
 if __name__ == "__main__":

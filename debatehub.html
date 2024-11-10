@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Debate Program - Mockup</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eef2f7;
+            margin: 0;
+            padding: 0;
+        }
+        #app {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        /* Header */
+        #header {
+            background-color: #3f51b5;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        #header h1 {
+            margin: 0;
+        }
+        /* Content */
+        #content {
+            padding: 20px;
+        }
+        /* Introduction */
+        #intro {
+            text-align: center;
+        }
+        #intro h2 {
+            color: #3f51b5;
+        }
+        /* Debate Section */
+        #debate {
+            display: none;
+        }
+        .turn {
+            display: none;
+            margin-bottom: 30px;
+        }
+        .turn.active {
+            display: block;
+        }
+        .agent {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #3f51b5;
+        }
+        .argument {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-left: 4px solid #3f51b5;
+        }
+        .argument p {
+            margin: 0 0 10px 0;
+            line-height: 1.6;
+        }
+        .citations {
+            font-size: 0.9em;
+            color: #555;
+        }
+        /* Controls */
+        #controls {
+            text-align: center;
+            margin: 30px 0;
+        }
+        #controls button {
+            padding: 12px 25px;
+            font-size: 16px;
+            margin: 0 10px;
+            background-color: #3f51b5;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        #controls button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        /* Evaluation Section */
+        #evaluation {
+            display: none;
+        }
+        #evaluation h2 {
+            color: #3f51b5;
+            text-align: center;
+        }
+        .agent-score {
+            margin-bottom: 30px;
+        }
+        .agent-score h3 {
+            color: #3f51b5;
+        }
+        .score-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .score-table th, .score-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        .score-table th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+        .total-score {
+            font-weight: bold;
+        }
+        /* Footer */
+        #footer {
+            background-color: #f1f1f1;
+            color: #555;
+            padding: 15px;
+            text-align: center;
+            font-size: 0.9em;
+        }
+        /* Rubric Modal */
+        #rubric-modal {
+            display: none;
+            position: fixed;
+            z-index: 10;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+        #rubric-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            width: 80%;
+            max-width: 600px;
+            position: relative;
+        }
+        #rubric-content h2 {
+            margin-top: 0;
+            color: #3f51b5;
+        }
+        #rubric-content table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        #rubric-content th, #rubric-content td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        #rubric-content th {
+            background-color: #f2f2f2;
+        }
+        #close-rubric {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        /* Mobile Responsiveness */
+        @media (max-width: 600px) {
+            #controls button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            #controls button:last-child {
+                margin-bottom: 0;
+            }
+            #rubric-content {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div id="header">
+            <h1>AI Debate Program</h1>
+        </div>
+        <div id="content">
+            <!-- Introduction -->
+            <div id="intro">
+                <h2>Welcome to the AI Debate Program!</h2>
+                <p><strong>Topic:</strong> Gun Control</p>
+                <p><strong>Number of Turns:</strong> 5</p>
+                <div id="controls">
+                    <button id="start-debate">Start Debate</button>
+                    <button id="view-rubric">View Judging Rubric</button>
+                </div>
+            </div>
+            <!-- Debate Section -->
+            <div id="debate">
+                <!-- Turn Template -->
+                <!-- Repeat this block for each turn -->
+                <div class="turn" id="turn-1">
+                    <div class="agent">Turn 1 - Agent Pro:</div>
+                    <div class="argument">
+                        <p>Implementing gun control is crucial for enhancing public safety. Countries with stringent gun laws, like Australia, have witnessed significant declines in gun-related deaths (<a href="#">Smith et al., 2019</a>). A study shows a 50% reduction in mass shootings after strict regulations were enacted (<a href="#">Doe, 2020</a>).</p>
+                        <div class="citations">
+                            <p><strong>Citations:</strong></p>
+                            <ul>
+                                <li>Smith, J., &amp; Brown, L. (2019). Impact of Gun Control in Australia. <em>Journal of Public Safety</em>.</li>
+                                <li>Doe, A. (2020). Mass Shootings and Legislation Effects. <em>Global Security Review</em>.</li>
+                            </ul>
+                            <p><strong>Trustworthiness Ranking:</strong> High</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Repeat similar blocks for other turns -->
+                <!-- Turn 2 -->
+                <div class="turn" id="turn-2">
+                    <div class="agent">Turn 2 - Agent Con:</div>
+                    <div class="argument">
+                        <p>While safety is important, gun control infringes upon constitutional rights. The Second Amendment ensures citizens can protect themselves (<a href="#">Johnson, 2018</a>). Additionally, criminals often obtain guns illegally, so regulations may not effectively reduce crime (<a href="#">Lee, 2017</a>).</p>
+                        <div class="citations">
+                            <p><strong>Citations:</strong></p>
+                            <ul>
+                                <li>Johnson, R. (2018). The Importance of the Second Amendment. <em>Constitutional Law Journal</em>.</li>
+                                <li>Lee, S. (2017). Illegal Firearms and Crime Rates. <em>Criminal Justice Quarterly</em>.</li>
+                            </ul>
+                            <p><strong>Trustworthiness Ranking:</strong> Medium</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Turn 3 -->
+                <div class="turn" id="turn-3">
+                    <div class="agent">Turn 3 - Agent Pro:</div>
+                    <div class="argument">
+                        <p>Regulating firearms doesn't abolish ownership but promotes responsible usage. Background checks have prevented over 3 million gun sales to prohibited individuals (<a href="#">Federal Bureau of Investigation, 2021</a>). This indicates that regulations can be effective.</p>
+                        <div class="citations">
+                            <p><strong>Citations:</strong></p>
+                            <ul>
+                                <li>Federal Bureau of Investigation. (2021). NICS Firearm Background Checks: Month/Year by State.</li>
+                            </ul>
+                            <p><strong>Trustworthiness Ranking:</strong> High</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Turn 4 -->
+                <div class="turn" id="turn-4">
+                    <div class="agent">Turn 4 - Agent Con:</div>
+                    <div class="argument">
+                        <p>However, these measures can impede law-abiding citizens while criminals bypass laws. In Chicago, strict gun laws haven't stopped high crime rates (<a href="#">Williams, 2019</a>). Efforts should focus on enforcement and addressing root causes like poverty.</p>
+                        <div class="citations">
+                            <p><strong>Citations:</strong></p>
+                            <ul>
+                                <li>Williams, T. (2019). Gun Control and Urban Crime. <em>Urban Studies Journal</em>.</li>
+                            </ul>
+                            <p><strong>Trustworthiness Ranking:</strong> Medium</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Turn 5 -->
+                <div class="turn" id="turn-5">
+                    <div class="agent">Turn 5 - Agent Pro:</div>
+                    <div class="argument">
+                        <p>Combining regulations with social programs can yield better results. Japan's strict laws and focus on mental health have led to one of the lowest gun violence rates globally (<a href="#">Kato &amp; Saito, 2020</a>). This holistic approach demonstrates the effectiveness of gun control.</p>
+                        <div class="citations">
+                            <p><strong>Citations:</strong></p>
+                            <ul>
+                                <li>Kato, H., &amp; Saito, M. (2020). Gun Control and Public Safety in Japan. <em>Asian Journal of Criminology</em>.</li>
+                            </ul>
+                            <p><strong>Trustworthiness Ranking:</strong> High</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Controls -->
+                <div id="controls">
+                    <button id="prev-turn">Previous</button>
+                    <button id="next-turn">Next</button>
+                </div>
+            </div>
+            <!-- Evaluation Section -->
+            <div id="evaluation">
+                <h2>Evaluation of the Debate</h2>
+                <div class="agent-score">
+                    <h3>Agent Pro</h3>
+                    <table class="score-table">
+                        <tr>
+                            <th>Category</th>
+                            <th>Description</th>
+                            <th>Score (Out of 10)</th>
+                        </tr>
+                        <tr>
+                            <td>Strength of Arguments</td>
+                            <td>Logical soundness and persuasiveness.</td>
+                            <td>9</td>
+                        </tr>
+                        <tr>
+                            <td>Use of Evidence and Citations</td>
+                            <td>Supporting points with evidence.</td>
+                            <td>9</td>
+                        </tr>
+                        <tr>
+                            <td>Trustworthiness of Sources</td>
+                            <td>Reliability of cited sources.</td>
+                            <td>9</td>
+                        </tr>
+                        <tr>
+                            <td>Ability to Refute Opponent's Points</td>
+                            <td>Effectiveness in countering arguments.</td>
+                            <td>8</td>
+                        </tr>
+                        <tr>
+                            <td class="total-score">Total Score</td>
+                            <td></td>
+                            <td class="total-score">35</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="agent-score">
+                    <h3>Agent Con</h3>
+                    <table class="score-table">
+                        <tr>
+                            <th>Category</th>
+                            <th>Description</th>
+                            <th>Score (Out of 10)</th>
+                        </tr>
+                        <tr>
+                            <td>Strength of Arguments</td>
+                            <td>Logical soundness and persuasiveness.</td>
+                            <td>7</td>
+                        </tr>
+                        <tr>
+                            <td>Use of Evidence and Citations</td>
+                            <td>Supporting points with evidence.</td>
+                            <td>7</td>
+                        </tr>
+                        <tr>
+                            <td>Trustworthiness of Sources</td>
+                            <td>Reliability of cited sources.</td>
+                            <td>7</td>
+                        </tr>
+                        <tr>
+                            <td>Ability to Refute Opponent's Points</td>
+                            <td>Effectiveness in countering arguments.</td>
+                            <td>7</td>
+                        </tr>
+                        <tr>
+                            <td class="total-score">Total Score</td>
+                            <td></td>
+                            <td class="total-score">28</td>
+                        </tr>
+                    </table>
+                </div>
+                <p><strong>Winner:</strong> Agent Pro</p>
+                <p><strong>Judge’s Evaluation Summary:</strong> Agent Pro presented stronger arguments with high-quality evidence from trustworthy sources. Their ability to refute the opponent's points was more effective, leading to a higher overall score.</p>
+                <div id="controls">
+                    <button id="restart">Start Over</button>
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            &copy; 2023 AI Debate Program
+        </div>
+        <!-- Rubric Modal -->
+        <div id="rubric-modal">
+            <div id="rubric-content">
+                <button id="close-rubric">&times;</button>
+                <h2>Judging Rubric</h2>
+                <table>
+                    <tr>
+                        <th>Category</th>
+                        <th>Description</th>
+                        <th>Scoring (Out of 10)</th>
+                    </tr>
+                    <tr>
+                        <td>Strength of Arguments</td>
+                        <td>Measures the logical soundness, depth, and overall persuasiveness of each agent's arguments.</td>
+                        <td>Score: 1 to 10</td>
+                    </tr>
+                    <tr>
+                        <td>Use of Evidence and Citations</td>
+                        <td>Evaluates how well each agent supports their points with evidence and cited sources.</td>
+                        <td>Score: 1 to 10</td>
+                    </tr>
+                    <tr>
+                        <td>Trustworthiness of Sources</td>
+                        <td>Assesses the reliability and credibility of the sources cited by each agent.</td>
+                        <td>Score: 1 to 10</td>
+                    </tr>
+                    <tr>
+                        <td>Ability to Refute Opponent's Points</td>
+                        <td>Judges each agent's effectiveness in countering and addressing the arguments made by the opponent.</td>
+                        <td>Score: 1 to 10</td>
+                    </tr>
+                </table>
+                <p><strong>Total Score Calculation:</strong> Sum the scores for each category to determine the overall score for each agent.</p>
+                <p><strong>Winner Declaration:</strong> The agent with the highest total score is declared the winner.</p>
+                <p><strong>Judge’s Evaluation Summary:</strong> A brief analysis explaining the decision based on the scores and qualitative aspects of the debate.</p>
+            </div>
+        </div>
+        <script>
+            // Variables
+            const startDebateBtn = document.getElementById('start-debate');
+            const viewRubricBtn = document.getElementById('view-rubric');
+            const intro = document.getElementById('intro');
+            const debate = document.getElementById('debate');
+            const evaluation = document.getElementById('evaluation');
+            const prevTurnBtn = document.getElementById('prev-turn');
+            const nextTurnBtn = document.getElementById('next-turn');
+            const restartBtn = document.getElementById('restart');
+            const turns = document.querySelectorAll('.turn');
+            const rubricModal = document.getElementById('rubric-modal');
+            const closeRubricBtn = document.getElementById('close-rubric');
+            let currentTurn = 0;
+
+            // Event Listeners
+            startDebateBtn.addEventListener('click', startDebate);
+            viewRubricBtn.addEventListener('click', openRubric);
+            closeRubricBtn.addEventListener('click', closeRubric);
+            window.addEventListener('click', outsideClick);
+            nextTurnBtn.addEventListener('click', nextTurn);
+            prevTurnBtn.addEventListener('click', prevTurn);
+            restartBtn.addEventListener('click', restart);
+
+            // Functions
+            function startDebate() {
+                intro.style.display = 'none';
+                debate.style.display = 'block';
+                turns[currentTurn].classList.add('active');
+                prevTurnBtn.disabled = true;
+            }
+
+            function nextTurn() {
+                turns[currentTurn].classList.remove('active');
+                currentTurn++;
+                if (currentTurn < turns.length) {
+                    turns[currentTurn].classList.add('active');
+                    prevTurnBtn.disabled = false;
+                    if (currentTurn === turns.length - 1) {
+                        nextTurnBtn.textContent = 'View Evaluation';
+                    }
+                } else {
+                    debate.style.display = 'none';
+                    evaluation.style.display = 'block';
+                }
+            }
+
+            function prevTurn() {
+                turns[currentTurn].classList.remove('active');
+                currentTurn--;
+                turns[currentTurn].classList.add('active');
+                nextTurnBtn.textContent = 'Next';
+                if (currentTurn === 0) {
+                    prevTurnBtn.disabled = true;
+                }
+            }
+
+            function restart() {
+                evaluation.style.display = 'none';
+                intro.style.display = 'block';
+                currentTurn = 0;
+                turns.forEach(turn => turn.classList.remove('active'));
+                nextTurnBtn.textContent = 'Next';
+            }
+
+            function openRubric() {
+                rubricModal.style.display = 'block';
+            }
+
+            function closeRubric() {
+                rubricModal.style.display = 'none';
+            }
+
+            function outsideClick(e) {
+                if (e.target == rubricModal) {
+                    rubricModal.style.display = 'none';
+                }
+            }
+        </script>
+    </div>
+</body>
+</html>
+
